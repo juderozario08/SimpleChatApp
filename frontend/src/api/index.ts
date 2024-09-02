@@ -1,5 +1,5 @@
 const socket = new WebSocket("ws://localhost:8080/ws");
-const connect = () => {
+const connect = (updateChat: any) => {
     console.log("Connecting ...");
     socket.onopen = () => {
         console.log("Connected to websocket at port 8080");
@@ -8,6 +8,7 @@ const connect = () => {
         console.log("Closed connection: ", event);
     };
     socket.onmessage = (message) => {
+        updateChat(message);
         console.log("Message received: ", message);
     };
     socket.onerror = (error) => {
