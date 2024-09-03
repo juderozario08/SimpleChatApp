@@ -26,6 +26,7 @@ type Message struct {
 // Once the reading is done, the client must be disconnected
 func (c *Client) Read() {
 	defer func() {
+		fmt.Println("Unregistering users")
 		c.Pool.Unregister <- c
 		c.Conn.Close()
 	}()
@@ -33,6 +34,7 @@ func (c *Client) Read() {
 		msgType, msg, err := c.Conn.ReadMessage()
 		if err != nil {
 			log.Println(err)
+			return
 		}
 		c.Pool.Broadcast <- Message{Type: msgType, Body: string(msg)}
 		fmt.Println("Message Received")

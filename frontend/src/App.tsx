@@ -4,29 +4,34 @@ import "./App.css";
 import ChatHistory from "./components/ChatHistory/ChatHistory";
 import Header from "./components/Header/Header";
 import { Send } from "react-feather";
+import ChatInput from "./components/ChatInput/ChatInput";
 
 class App extends Component {
     state = {
         chatHistory: [],
+        msg: "",
     };
 
     constructor(props: any) {
         super(props);
     }
 
-    setMessage(e: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({ message: e.target.value });
-    }
+    setMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({ msg: e.target.value });
+    };
 
-    send() {
-        sendMessage("hello");
-    }
+    send = () => {
+        if (this.state.msg.trim().length > 0) {
+            sendMessage(this.state.msg);
+            this.setState({ msg: "" });
+        }
+    };
 
     componentDidMount() {
         connect((msg: any) => {
             console.log("New Message");
             this.setState((_) => ({
-                chatHistory: [...this.state.chatHistory, msg],
+                chatHistory: [...this.state.chatHistory, JSON.parse(msg.data)],
             }));
             console.log(this.state);
         });
@@ -34,17 +39,14 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div className="App h-full">
                 <Header />
                 <ChatHistory chatHistory={this.state.chatHistory} />
-                <div className="flex flex-row gap-2">
-                    <button
-                        className="rounded-3xl bg-slate-800 hover:bg-slate-700 p-[10px]"
-                        onClick={this.send}
-                    >
-                        <Send width={15} height={15} />
-                    </button>
-                </div>
+                <ChatInput
+                    msg={this.state.msg}
+                    setMessage={this.setMessage}
+                    send={this.send}
+                />
             </div>
         );
     }

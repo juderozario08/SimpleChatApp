@@ -23,6 +23,11 @@ func NewPool() *Pool {
 	}
 }
 
+const (
+	NewUser int = iota
+	DeletedUser
+)
+
 func (p *Pool) Start() {
 	for {
 		select {
@@ -31,7 +36,7 @@ func (p *Pool) Start() {
 			fmt.Println("Size of connection pool: ", len(p.Clients))
 			for client := range p.Clients {
 				if err := client.Conn.WriteJSON(Message{
-					Type: 1,
+					Type: NewUser,
 					Body: "New user has entered...",
 				}); err != nil {
 					log.Println(err)
@@ -39,10 +44,11 @@ func (p *Pool) Start() {
 				}
 			}
 		case client := <-p.Unregister:
+			fmt.Println("USER IS BEING UNREGISTERED")
 			delete(p.Clients, client)
 			fmt.Println("Size of connection pool: ", len(p.Clients))
 			for client := range p.Clients {
-				if err := client.Conn.WriteJSON(Message{Type: 1, Body: "User disconnected..."}); err != nil {
+				if err := client.Conn.WriteJSON(Message{Type: DeletedUser, Body: "User disconnected..."}); err != nil {
 					log.Println(err)
 					return
 				}
