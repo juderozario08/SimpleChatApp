@@ -1,0 +1,6 @@
+.scroll {
+    margin: 5px;
+    padding: 5px;
+    overflow: auto;
+    text-align: justify;
+}

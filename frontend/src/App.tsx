@@ -3,7 +3,6 @@ import { connect, sendMessage } from "./api";
 import "./App.css";
 import ChatHistory from "./components/ChatHistory/ChatHistory";
 import Header from "./components/Header/Header";
-import { Send } from "react-feather";
 import ChatInput from "./components/ChatInput/ChatInput";
 
 class App extends Component {
@@ -11,10 +10,6 @@ class App extends Component {
         chatHistory: [],
         msg: "",
     };
-
-    constructor(props: any) {
-        super(props);
-    }
 
     setMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ msg: e.target.value });
@@ -33,7 +28,6 @@ class App extends Component {
             this.setState((_) => ({
                 chatHistory: [...this.state.chatHistory, JSON.parse(msg.data)],
             }));
-            console.log(this.state);
         });
     }
 

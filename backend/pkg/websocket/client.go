@@ -10,6 +10,7 @@ import (
 // Each client is going to have an ID, a Connection and a Pool associated with them
 type Client struct {
 	ID   string
+	Name string
 	Conn *websocket.Conn
 	Pool *Pool
 }
@@ -17,6 +18,7 @@ type Client struct {
 // The Message struct is just going to show what the messageType is and what the message is
 type Message struct {
 	Type int    `json: "type"`
+	Name string `json: "name"`
 	Body string `json: "body"`
 }
 
@@ -36,7 +38,7 @@ func (c *Client) Read() {
 			log.Println(err)
 			return
 		}
-		c.Pool.Broadcast <- Message{Type: msgType, Body: string(msg)}
+		c.Pool.Broadcast <- Message{Type: msgType, Body: string(msg), Name: c.Name}
 		fmt.Println("Message Received")
 	}
 }

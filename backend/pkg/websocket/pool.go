@@ -37,7 +37,7 @@ func (p *Pool) Start() {
 			for client := range p.Clients {
 				if err := client.Conn.WriteJSON(Message{
 					Type: NewUser,
-					Body: "New user has entered...",
+					Body: client.Name + " has entered...",
 				}); err != nil {
 					log.Println(err)
 					return

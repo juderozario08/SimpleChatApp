@@ -1,22 +1,22 @@
 import React, { Component } from "react";
 import { Message } from "../../interface";
 import MessageComponent from "../Message/Message";
+import "./ChatHistory.css";
 
 interface ChatHistoryProps {
-    chatHistory: Message[];
+	chatHistory: Message[];
 }
 
 class ChatHistory extends Component<ChatHistoryProps> {
-    render() {
-        return (
-            <div>
-                <h1 className="text-2xl font-bold py-3">Chat History</h1>
-                {this.props.chatHistory.map((msg: Message, idx: any) => (
-                    <MessageComponent key={idx} message={msg} />
-                ))}
-            </div>
-        );
-    }
+	render() {
+		return (
+			<div id="chatHistory" className="h-[89vh] w-[63vw] scroll">
+				{[...this.props.chatHistory].map((msg: Message, idx: any) => (
+					<MessageComponent key={idx} message={msg} />
+				))}
+			</div>
+		);
+	}
 }
 
 export default ChatHistory;
