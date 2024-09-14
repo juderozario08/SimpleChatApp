@@ -12,26 +12,39 @@ class App extends React.Component {
     /**
      * @typedef {Object} State
      * @property {string[]} chatHistory
+     * @property {string} name
      * */
 
     /** @type {State} */
     state = {
-        chatHistory: []
+        chatHistory: [],
+        name: ""
     }
 
     /**
-     * @param {string} e
+     * @param {string} msg
      * */
-    send = (e) => {
-        sendMessage(e)
+    send = (msg) => {
+        sendMessage(`${msg}`)
     }
 
+
     componentDidMount() {
-        connect((msg) => {
-            console.log("New Message")
-            this.setState({ chatHistory: [...this.state.chatHistory, msg] })
-        })
+        connect(
+            (msg) => {
+                console.log("New Message:", msg);
+                this.setState(prevState => {
+                    console.log("Updating chat history:", [...prevState.chatHistory, msg]);
+                    return { chatHistory: [...prevState.chatHistory, msg] };
+                });
+            },
+            (n) => {
+                console.log("Assigning name:", n);
+                this.setState({ name: n });
+            }
+        );
     }
+
 
     render() {
         return (

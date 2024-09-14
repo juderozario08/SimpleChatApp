@@ -18,6 +18,7 @@ func serveWebSocket(p *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	client := &websocket.Client{
 		Conn: conn,
 		Pool: p,
+		Name: fmt.Sprintf("guest%v", len(p.Clients)),
 	}
 	// Then register the client to the pool
 	p.Register <- client

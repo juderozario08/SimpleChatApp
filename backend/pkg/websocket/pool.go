@@ -25,6 +25,7 @@ func NewPool() *Pool {
 
 const (
 	NewUser int = iota
+	Msg
 	DeletedUser
 )
 
@@ -34,9 +35,10 @@ func (p *Pool) Start() {
 		case client := <-p.Register:
 			p.Clients[client] = true
 			fmt.Println("Size of connection pool: ", len(p.Clients))
-			for client := range p.Clients {
-				if err := client.Conn.WriteJSON(Message{
+			for cl := range p.Clients {
+				if err := cl.Conn.WriteJSON(Message{
 					Type: NewUser,
+					Name: client.Name,
 					Body: client.Name + " has entered...",
 				}); err != nil {
 					log.Println(err)
